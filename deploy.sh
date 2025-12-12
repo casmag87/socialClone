@@ -3,7 +3,7 @@
 TOMCAT_URL="http://localhost:8080"
 TOMCAT_USER="nibro"
 TOMCAT_PASSWORD="070487"
-APP_NAME="coffeeData"
+APP_NAME="socialClone"
 WAR_FILE="target/${APP_NAME}.war"
 DEPLOY_PATH="/${APP_NAME}"
 

@@ -10,9 +10,7 @@ public class ApplicationConfig extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new HashSet<>();
-        resources.add(UserController.class);
-        resources.add(ProductionController.class);
-        resources.add(CountryController.class);
+        resources.add(UserResource.class);
 
         resources.add(org.glassfish.jersey.server.wadl.internal.WadlResource.class);
 
