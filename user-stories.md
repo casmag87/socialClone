@@ -1,21 +1,42 @@
 User Stories for SocialClone
 1. User Management
 
+
 Registration
 
 As a new user, I want to register with my email and password so that I can create an account.
+
 
 Login
 
 As a registered user, I want to log in using my credentials so that I can access my account.
 
+
 Password Reset
 
 As a user, I want to reset my password if I forget it so that I can regain access to my account.
 
+
 Logout
 
 As a logged-in user, I want to log out so that my session is secure.
+
+
+Post Creation
+
+As a user, I want to create posts (text, image, or video) so that I can share my thoughts or content.
+
+Post Deletion
+
+As a user, I want to delete my posts so that I control what I share.
+
+
+Like & Comment
+
+As a user, I want to like posts so that I can show appreciation.
+
+As a user, I want to comment on posts so that I can interact with content.
+
 
 Profile Management
 
@@ -27,6 +48,7 @@ Password Reset
 
 As a user, I want to reset my password if I forget it so that I can regain access to my account.
 
+
 2. Social Interaction
 
 Follow/Unfollow
@@ -35,13 +57,6 @@ As a user, I want to follow other users so that I can see their posts in my feed
 
 As a user, I want to unfollow users so that I can stop seeing their posts.
 
-Post Creation
-
-As a user, I want to create posts (text, image, or video) so that I can share my thoughts or content.
-
-Post Feed
-
-As a user, I want to see a feed of posts from the users I follow so that I can keep up with their activity.
 
 Like & Comment
 
@@ -49,9 +64,11 @@ As a user, I want to like posts so that I can show appreciation.
 
 As a user, I want to comment on posts so that I can interact with content.
 
+
 Post Deletion
 
 As a user, I want to delete my posts so that I control what I share.
+
 
 3. Notifications
 
