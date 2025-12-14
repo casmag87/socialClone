@@ -9,6 +9,10 @@ Login
 
 As a registered user, I want to log in using my credentials so that I can access my account.
 
+Password Reset
+
+As a user, I want to reset my password if I forget it so that I can regain access to my account.
+
 Logout
 
 As a logged-in user, I want to log out so that my session is secure.
