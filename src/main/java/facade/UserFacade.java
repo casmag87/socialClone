@@ -1,6 +1,8 @@
 package facade;
 
+import entities.Role;
 import entities.User;
+import errorhandling.AuthenticationFailedException;
 
 import javax.naming.AuthenticationException;
 import javax.persistence.EntityManager;
@@ -22,38 +24,62 @@ public class UserFacade {
         return instance;
     }
 
-    public User getVeryfiedUser(String username, String password) throws AuthenticationException {
+    public User getVeryfiedUser(String username, String password) throws AuthenticationFailedException{
         EntityManager em = emf.createEntityManager();
-        User user;
         try {
-            user = em.find(User.class, username);
-            if (user == null || !user.verifyPassword(password)) {
-                throw new AuthenticationException("Invalid user name or password");
+            User user = em.createQuery("SELECT u FROM User u WHERE u.name = :username", User.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+
+            if (!user.verifyPassword(password)) {
+                throw new AuthenticationFailedException("Invalid username or password");
             }
+            return user;
+        } catch (javax.persistence.NoResultException e) {
+            throw new AuthenticationFailedException("Invalid username or password");
         } finally {
             em.close();
         }
-        return user;
     }
 
-    public User createUser (User user){
-
+    public User createUser(User user) {
         EntityManager em = emf.createEntityManager();
-        try{
+        try {
             em.getTransaction().begin();
+
+            // Find existing "user" role by primary key
+            Role userRole = em.find(Role.class, "user"); // assuming 'name' is the PK
+            if (userRole == null) {
+                userRole = new Role("user");
+                em.persist(userRole);
+            }
+
+            // Assign role to user
+            user.getRoleList().add(userRole);
+
+            // Persist the user
             em.persist(user);
+
             em.getTransaction().commit();
             return user;
-        }finally {
+
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e; // propagate exception
+        } finally {
             em.close();
         }
-
-
-
-
-
-
     }
+
+
+
+
+
+
+
+
 
 
 

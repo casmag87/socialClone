@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "posts")
-public class Posts implements Serializable {
+public class Post implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,7 +24,7 @@ public class Posts implements Serializable {
     @ManyToOne
     private User user;
 
-    public Posts() {
+    public Post() {
     }
 
     @PrePersist
@@ -67,7 +67,7 @@ public class Posts implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Posts posts = (Posts) o;
+        Post posts = (Post) o;
         return Objects.equals(id, posts.id);
     }
 

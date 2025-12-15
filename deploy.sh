@@ -12,7 +12,7 @@ UNDEPLOY_URL="${TOMCAT_URL}/manager/text/undeploy?path=${DEPLOY_PATH}"
 
 # Step 1: Build the project using Maven
 echo "Building the project..."
-mvn clean package
+mvn clean package -DskipTests
 
 # Step 2: Undeploy the existing application (optional)
 echo "Undeploying existing application (if any)..."

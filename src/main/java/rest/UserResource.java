@@ -6,24 +6,21 @@ import entities.User;
 import facade.UserFacade;
 import util.EMF_Creator;
 
+import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
 import java.util.List;
 
 @Path("users")
 public class UserResource {
 
+    private static final EntityManagerFactory EMF = EMF_Creator.getEMF();
     private final UserFacade userFacade = UserFacade.getUserFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final EntityManagerFactory EMF = EMF_Creator.getEMF();
+
 
     @Context
     private UriInfo context;
@@ -51,6 +48,17 @@ public class UserResource {
             em.close();
         }
     }
+
+    @POST
+    @Consumes
+    @Produces
+    public Response createUser(User user){
+        User result = userFacade.createUser(user);
+
+        return Response.status(Response.Status.CREATED).entity(result).build();
+
+    }
+
 
 
 }

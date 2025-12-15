@@ -1,5 +1,6 @@
 package entities;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -16,7 +17,9 @@ public class Role implements Serializable {
     @Column(name = "role_name", length = 20)
     private String roleName;
 
+
     @ManyToMany(mappedBy = "roleList")
+    @JsonbTransient
     private List<User> userList;
 
     public Role() {

@@ -5,7 +5,6 @@ import org.mindrot.jbcrypt.BCrypt;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.ws.rs.Path;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +14,16 @@ import java.util.List;
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    Long id;
 
-    @Column(name= "user_name", length = 20)
-    String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // <-- primary key
+    private Long id;
 
-    @Column(name= "email", length = 100)
-    String email;
+    @Column(name = "user_name", length = 20)
+    private String name;
+
+    @Column(name = "email", length = 100, unique = true)
+    private String email;
 
     @Basic(optional = false)
     @NotNull
@@ -29,57 +31,61 @@ public class User implements Serializable {
     @Column(name = "user_pass")
     private String userPass;
 
-    @JoinTable(name = "user_roles", joinColumns = {
-            @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
-            @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
-
-
     @ManyToMany
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), // now points to primary key
+            inverseJoinColumns = @JoinColumn(name = "role_name", referencedColumnName = "role_name")
+    )
     private List<Role> roleList = new ArrayList<>();
 
     public List<String> getRolesAsStrings() {
-        if (roleList.isEmpty()) {
-            return null;
-        }
+        if (roleList.isEmpty()) return null;
         List<String> rolesAsStrings = new ArrayList<>();
-        roleList.forEach((role) -> {
-            rolesAsStrings.add(role.getRoleName());
-        });
+        roleList.forEach(role -> rolesAsStrings.add(role.getRoleName()));
         return rolesAsStrings;
     }
 
-    public boolean verifyPassword(String pw){
-        return(BCrypt.checkpw(pw,userPass));
+    public boolean verifyPassword(String pw) {
+        return BCrypt.checkpw(pw, userPass);
     }
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<Post> posts;
+
 
     public User(String name, String userPass) {
         this.name = name;
-
-        this.userPass = BCrypt.hashpw(userPass,BCrypt.gensalt());
+        this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
     }
 
+    public User() {} // <-- default constructor required by JPA
 
-    public Long getId() {
-        return id;
+    // Getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getUserPass() { return userPass; }
+    public void setUserPass(String userPass) {
+        this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public List<Post> getPosts() {
+        return posts;
     }
 
-    public String getName() {
-        return name;
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public List<Role> getRoleList() { return roleList; }
+    public void setRoleList(List<Role> roleList) { this.roleList = roleList; }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }
+
